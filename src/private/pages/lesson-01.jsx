@@ -1,6 +1,6 @@
 import LessonPage from './LessonPage.jsx';
 import ExerciseSection from '../../exercises/exerciseSection';
-import StudentWork01 from '../../exercises/lesson-01/studentWork';
+import { StudentWork as StudentWork01 } from '../../exercises/lesson-01/studentWork';
 
 export default function Lesson01() {
   return (
