@@ -2,7 +2,7 @@
 
 ## Exercise Objectives
 
-In this exercise, you'll use local state management to convert an uncontrolled form to a controlled one. You'll also add live field validation to improve the user's experience. By the end, you'll better understand how controlled components provide better predictability and user experience compared to uncontrolled forms that rely on the DOM for state management.
+In this eaxercise, you'll use local state management to convert an uncontrolled form to a controlled one. You'll also add live field validation to improve the user's experience. By the end, you'll better understand how controlled components provide better predictability and user experience compared to uncontrolled forms that rely on the DOM for state management.
 
 ## Scenario Details
 
