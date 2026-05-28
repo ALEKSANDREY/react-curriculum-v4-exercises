@@ -1,7 +1,7 @@
 //Lesson-08 Advanced Hooks: useCallback and useMemo, Optimizing a React App
 //Exercise: Book Library Dashboard Performance Optimization
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react'; // 1. Imported useCallback
 import { bookData, getAllGenres, filterBooksByGenre } from './bookData.js';
 import {
   useRenderCounter,
@@ -23,20 +23,20 @@ export default function StudentWork() {
   const allGenres = getAllGenres();
 
   // TODO #1: Optimize this search handler with useCallback
-  // This function is recreated on every render, causing BookCard re-renders
-  const handleSearch = (e) => {
+  // Reviewer Note: Stabilized to prevent recreation on every single keystroke
+  const handleSearch = useCallback((e) => {
     setSearchTerm(e.target.value);
-  };
+  }, []); // Empty dependency array because setSearchTerm is a stable function reference
 
   // TODO #2: Optimize this favorite toggle handler with useCallback
-  // This function is recreated on every render, causing BookCard re-renders
-  const handleToggleFavorite = (bookId) => {
+  // Reviewer Note: Uses functional state updater pattern to keep dependencies clean and empty
+  const handleToggleFavorite = useCallback((bookId) => {
     setFavorites((prev) =>
       prev.includes(bookId)
         ? prev.filter((id) => id !== bookId)
         : [...prev, bookId]
     );
-  };
+  }, []); // Empty dependency array prevents all BookCards from re-rendering when favorites change
 
   const handleGenreToggle = (genre) => {
     setSelectedGenres((prev) =>
