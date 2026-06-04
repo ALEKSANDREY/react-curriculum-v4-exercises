@@ -38,73 +38,106 @@ const createNewQuestion = (payload, questionsLength) => ({
 
 export function surveyReducer(state, action) {
   switch (action.type) {
-    // ===== MVP ACTIONS (ALREADY WORKING) =====
-
-    case 'ADD_QUESTION':
-      return {
-        ...state,
-        questions: [
-          ...state.questions,
-          createNewQuestion(action.payload, state.questions.length),
-        ],
-        survey: {
-          ...state.survey,
-          lastModified: new Date().toISOString().split('T')[0],
-        },
-      };
-
-    case 'ADD_OPTION':
-      return {
-        ...state,
-        questions: state.questions.map((q) =>
-          q.id === action.payload.questionId
-            ? { ...q, options: [...q.options, action.payload.option] }
-            : q
-        ),
-      };
-
-    case 'SET_EDITING_QUESTION':
-      return {
-        ...state,
-        ui: {
-          ...state.ui,
-          editingQuestionId: action.payload.questionId,
-        },
-      };
-
-    case 'UPDATE_SURVEY_TITLE':
-      return {
-        ...state,
-        survey: {
-          ...state.survey,
-          title: action.payload.title,
-          lastModified: new Date().toISOString().split('T')[0],
-        },
-      };
-
+    // === RESTORED ORIGINAL MVP ACTIONS ===
     case 'TOGGLE_PREVIEW_MODE':
       return {
         ...state,
         ui: {
           ...state.ui,
           isPreviewMode: !state.ui.isPreviewMode,
-          editingQuestionId: null, // Clear editing when switching modes
         },
       };
-    // ===== END MVP ACTIONS =========
-    // ===== STUDENT IMPLEMENTATION TASKS =====
+
+    case 'UPDATE_SURVEY_META':
+      return {
+        ...state,
+        meta: {
+          ...state.meta,
+          [action.payload.field]: action.payload.value,
+        },
+      };
+
+    case 'ADD_QUESTION':
+      return {
+        ...state,
+        questions: [...state.questions, action.payload],
+      };
+
+    // === YOUR NEW LESSON-09 ACTIONS ===
+    case 'SET_EDITING_QUESTION':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          editingQuestionId: action.payload.id,
+        },
+      };
 
     case 'UPDATE_QUESTION_TEXT':
-      // TODO: Implement this action
-      console.log('TODO: Implement UPDATE_QUESTION_TEXT action');
-      return state;
+      return {
+        ...state,
+        questions: state.questions.map((q) =>
+          q.id === action.payload.id
+            ? { ...q, question: action.payload.newText }
+            : q
+        ),
+      };
 
     case 'DELETE_QUESTION':
-      // TODO: Implement this action
-      console.log('TODO: Implement DELETE_QUESTION action');
-      return state;
+      return {
+        ...state,
+        questions: state.questions.filter((q) => q.id !== action.payload.id),
+        ui: {
+          ...state.ui,
+          editingQuestionId:
+            state.ui.editingQuestionId === action.payload.id
+              ? null
+              : state.ui.editingQuestionId,
+        },
+      };
+
+    case 'ADD_OPTION_TO_QUESTION':
+      return {
+        ...state,
+        questions: state.questions.map((q) => {
+          if (q.id !== action.payload.questionId) return q;
+          return {
+            ...q,
+            options: [...(q.options || []), action.payload.optionText],
+          };
+        }),
+      };
+
+    case 'UPDATE_OPTION_TEXT':
+      return {
+        ...state,
+        questions: state.questions.map((q) => {
+          if (q.id !== action.payload.questionId) return q;
+          return {
+            ...q,
+            options: q.options.map((opt, idx) =>
+              idx === action.payload.optionIndex ? action.payload.newText : opt
+            ),
+          };
+        }),
+      };
+
+    case 'DELETE_OPTION_FROM_QUESTION':
+      return {
+        ...state,
+        questions: state.questions.map((q) => {
+          if (q.id !== action.payload.questionId) return q;
+          if (q.options.length <= 2) return q;
+          return {
+            ...q,
+            options: q.options.filter(
+              (_, idx) => idx !== action.payload.optionIndex
+            ),
+          };
+        }),
+      };
 
     default:
-      return state;
+      throw new Error(`Unknown action type: ${action.type}`);
   }
 }
