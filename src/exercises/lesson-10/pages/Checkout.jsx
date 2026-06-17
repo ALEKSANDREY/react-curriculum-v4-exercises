@@ -1,21 +1,18 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
-export default function Checkout() {
-  const navigate = null;
-
-  function handleGoHome() {}
-
-  function handleBack() {}
+function Checkout() {
+  const navigate = useNavigate();
 
   return (
-    <section>
-      <h2>Checkout</h2>
-      <p>This page exists to practice useNavigate().</p>
-
-      <div style={{ display: 'flex', gap: 10 }}>
-        <button onClick={handleGoHome}>Go Home (navigate)</button>
-        <button onClick={handleBack}>Back (navigate -1)</button>
+    <div>
+      <h2>Checkout Screen</h2>
+      <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+        {/* EXERCISE 4A REQUIREMENT: Programmatic routing */}
+        <button onClick={() => navigate('/')}>Go Home</button>
+        <button onClick={() => navigate(-1)}>Back</button>
       </div>
-    </section>
+    </div>
   );
 }
+
+export default Checkout;

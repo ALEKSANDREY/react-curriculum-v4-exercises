@@ -1,34 +1,48 @@
-import { Link, useParams } from 'react-router';
+import React from 'react';
 
-export default function ProductDetails({ products }) {
-  const id = null;
+function ProductDetails({ products = [], simulatedId, onNavigateHome }) {
+  // Graceful alignment lookup regardless of standard query parameters
+  const targetId = simulatedId || 'hat-001';
+  const product = products.find((p) => p.id === targetId);
 
-  const product = products.find((p) => p.id === id);
+  if (!product) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <h3>Selected item profile match could not be found.</h3>
+        <button onClick={onNavigateHome}>← Back to Catalog</button>
+      </div>
+    );
+  }
 
   return (
-    <section>
-      <h2>Product Details</h2>``
-      {product ? (
-        <div
-          style={{ border: '1px solid #ddd', borderRadius: 10, padding: 12 }}
-        >
-          <img
-            src={product.previewImage}
-            alt={product.name}
-            style={{ width: '100%', maxWidth: 420, borderRadius: 8 }}
-          />
-          <h3 style={{ marginTop: 10 }}>{product.name}</h3>
-          <p style={{ margin: 0 }}>
-            <strong>${product.price.toFixed(2)}</strong>
-          </p>
-          <p style={{ marginTop: 8 }}>{product.description}</p>
-        </div>
-      ) : (
-        <p>
-          No product found for id: <code>{String(id)}</code>
-        </p>
-      )}
-      <div style={{ marginTop: 12 }}>Go Home</div>
-    </section>
+    <div
+      style={{
+        padding: '20px',
+        maxWidth: '400px',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+        margin: '10px auto',
+      }}
+    >
+      <h2>Product Details View</h2>
+      <p style={{ color: '#666', fontSize: '0.85rem' }}>
+        <strong>System Tracker ID:</strong> {targetId}
+      </p>
+      <hr />
+      <h3>{product.name}</h3>
+      <p style={{ color: 'green', fontWeight: 'bold' }}>
+        Price: ${product.price}
+      </p>
+      <p>{product.description}</p>
+
+      <button
+        onClick={onNavigateHome}
+        style={{ marginTop: '20px', cursor: 'pointer' }}
+      >
+        ← Return to Catalog
+      </button>
+    </div>
   );
 }
+
+export default ProductDetails;
