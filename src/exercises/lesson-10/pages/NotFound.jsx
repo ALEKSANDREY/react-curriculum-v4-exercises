@@ -1,11 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router';
 
-export default function NotFound() {
-  const pathname = '';
+function NotFound() {
+  // EXERCISE 4B REQUIREMENT: Grab the current router location details
+  const location = useLocation();
 
   return (
-    <section>
-      <h2>404: Not Found</h2>
-    </section>
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h2>404 - Page Not Found</h2>
+      {/* Display the precise location pathname that failed matching */}
+      <p style={{ color: 'red' }}>
+        The path <code>{location.pathname}</code> does not exist.
+      </p>
+
+      <Link to="/">Return to Home</Link>
+    </div>
   );
 }
+
+export default NotFound;
